@@ -1,0 +1,103 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+Given a query object as input, this element makes AJAX request to elasticsearch REST API.
+
+Example:
+
+    <elastic-client 
+      config='{"host": "http://localhost:9200"}'
+      client="{{esclient}}"
+      cluster-status="{{my-status}}">
+    </elastic-client>
+
+    <elastic-search 
+      client="[[esclient]]"
+      index="ads"
+      query='{"query": {"match_all": {}}}'
+      results="{{data}}"
+      lastError="{{error}}">
+    </elastic-search>
+
+@demo demo/index.html
+-->
+
+
+<script>
+  Polymer({
+    is: 'elastic-search',
+
+    properties: {
+      /**
+       * an instance of elasticsearch.Client which is connected to 
+       * an elasticsearch server
+       */
+      client: {
+        type: Object
+      },
+
+      /**
+       * the elastic index (database name)
+       */
+      index: {
+        type: String
+      },
+
+      /**
+       * The elasticsearch query that should be invoked.  
+       * The query should specify offsets and length of the results.
+       * (see https://www.elastic.co for query API)
+       *
+       */
+      query: {
+        type: Object
+      },
+
+      /**
+       * elastic search JSON results available after a successful query.
+       *
+       */
+      results: {
+        type: Object,
+        notify: true,
+        readOnly: true
+      },
+
+      /**
+       * either null or an error object that was returned from elastic search server. 
+       */
+      lastError: {
+        type: Object,
+        notify: true,
+        readOnly: true
+      }
+    },
+
+    observers: [
+      'generateSearch(query, client)'
+    ],
+    /**
+     * Performs a server request via the elasticsearch client; invoked whenevery this.query is changed.
+     * 
+     * @return {ElasticSearchResults}
+     */
+    generateSearch: function() {
+
+      var self = this;
+
+      this.client.search({
+        index: this.index,
+        body: this.query
+      })
+      .then(function(results) {
+        self._setResults(results);
+        self._setLastError(null);
+      })
+      .catch(function(err) {
+        self._setLastError(err);
+      });        
+    }
+
+  });
+</script>
+
