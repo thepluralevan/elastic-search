@@ -5,16 +5,27 @@ server via the standard elasticsearch javascript api.
 
 Example:
 ```html
-<elastic-client 
-  config='{"host": "http://localhost:9200"}'>
-</elastic-client>
+    <template is="dom-bind">
+      <elastic-client 
+        config='{"host": "http://localhost:9200"}'
+        client="{{esclient}}"
+        cluster-status="{{my-status}}">
+      </elastic-client>
 
-<elastic-search 
-  client="[[client]]"
-  index="ads"
-  results={{data}}
-  lastError="{{error}}">
-</elastic-search>
+      <elastic-search 
+        client="[[esclient]]"
+        index="ads"
+        query='{"query": {"match_all": {}}}'
+        results="{{data}}"
+        lastError="{{error}}">
+      </elastic-search>
+
+      <span>hits: {{data.hits.total}}</span>
+      <template is="dom-repeat" items={{data.hits.hits}} 
+        as=item>
+        <p>{{item._source.title}}</p>
+      </template>
+    </template>
 
 
 ## Note
