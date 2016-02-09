@@ -14,6 +14,7 @@ Example:
     <elastic-search 
       client="[[esclient]]"
       index="ads"
+      elastic-type='["offer", "seller"]'
       query='{"query": {"match_all": {}}}'
       results="{{data}}"
       lastError="{{error}}">
@@ -41,6 +42,14 @@ Example:
        */
       index: {
         type: String
+      },
+
+      /**
+       * the elastic type (optional -- leave empty for all types)
+       */
+      elasticType: {
+        type: Array,
+        value: []
       },
 
       /**
@@ -87,7 +96,8 @@ Example:
 
       this.client.search({
         index: this.index,
-        body: this.query
+        body: this.query,
+        type: this.elasticType
       })
       .then(function(results) {
         self._setResults(results);
