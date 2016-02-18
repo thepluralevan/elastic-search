@@ -26,7 +26,7 @@ Example:
         <p>{{item._source.title}}</p>
       </template>
     </template>
-
+```
 
 ## Note
 To run the demo with polyserve, first install elasticsearch on your local host, start elasticsearch on port 9200, and then execute the import_test_data.sh shell script found in the data directory
