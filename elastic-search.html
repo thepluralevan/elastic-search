@@ -79,11 +79,29 @@ Example:
         type: Object,
         notify: true,
         readOnly: true
+      },
+
+      /**
+       * used to calculate the result offset for the elasticsearch query
+       */
+      page: {
+          type: Number,
+          value: 1,
+          notify: true
+      },
+
+      /**
+       * number of results to query for at a time
+       */
+      pageSize: {
+          type: Number,
+          value: 25,
+          notify: true
       }
     },
 
     observers: [
-      'generateSearch(query, index, client)'
+      'generateSearch(query, index, client, page, pageSize)'
     ],
     /**
      * Performs a server request via the elasticsearch client; invoked whenevery this.query is changed.
@@ -97,7 +115,9 @@ Example:
       this.client.search({
         index: this.index,
         body: this.query,
-        type: this.elasticType
+        type: this.elasticType,
+        size: this.pageSize,
+        from: this.pageSize * (this.page - 1)
       })
       .then(function(results) {
         self._setResults(results);

@@ -52,11 +52,20 @@
           assert.equal(es.elasticType, 'ad');
         });
 
+        test('defines the page property', function () {
+          assert.equal(es.page, 1);
+        });
+
+        test('defines the pageSize property', function() {
+          assert.equal(es.pageSize, 25);
+        });
+
         test('submits query', function (done) {
             es.addEventListener('results-changed', function (event) {
               expect(es.results).to.be.an('object');
               expect(es.results).to.not.be.empty;
               expect(es.results).to.include.keys('hits');
+              expect(es.results.hits.hits.length).to.equal(25);
               expect(es.lastError).to.not.exist;
               assert.equal(es.results.hits.hits[0]._type, 'ad');
               done();
