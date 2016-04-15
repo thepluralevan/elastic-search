@@ -59,7 +59,8 @@ Example:
        *
        */
       query: {
-        type: Object
+        type: Object,
+        observer: '_resetPage'
       },
 
       /**
@@ -96,13 +97,31 @@ Example:
       pageSize: {
           type: Number,
           value: 25,
+          notify: true,
+          observer: '_resetPage'
+      },
+
+      /**
+       *  indicate that search is in progress.
+       */
+      loading: {
+          type: Boolean,
+          value: false,
+          readOnly: true,
           notify: true
       }
+
     },
 
     observers: [
       'generateSearch(query, index, client, page, pageSize)'
     ],
+    /**
+     * Reset page to 1.
+     */
+    _resetPage: function() {
+        this.page = 1;
+    },
     /**
      * Performs a server request via the elasticsearch client; invoked whenevery this.query is changed.
      * 
@@ -112,6 +131,7 @@ Example:
 
       var self = this;
 
+      self._setLoading(true);
       this.client.search({
         index: this.index,
         body: this.query,
@@ -122,9 +142,11 @@ Example:
       .then(function(results) {
         self._setResults(results);
         self._setLastError(null);
+        self._setLoading(false);
       })
       .catch(function(err) {
         self._setLastError(err);
+        self._setLoading(false);
       });        
     }
 

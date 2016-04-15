@@ -60,6 +60,10 @@
           assert.equal(es.pageSize, 25);
         });
 
+        test('defines the loading property', function () {
+          assert.equal(es.loading, false);
+        });
+
         test('submits query', function (done) {
             es.addEventListener('results-changed', function (event) {
               expect(es.results).to.be.an('object');
