@@ -17,7 +17,7 @@ Example:
       elastic-type='["offer", "seller"]'
       query='{"query": {"match_all": {}}}'
       results="{{data}}"
-      lastError="{{error}}">
+      last-error="{{error}}">
     </elastic-search>
 
 @demo demo/index.html
@@ -78,6 +78,7 @@ Example:
        */
       lastError: {
         type: Object,
+        value: null,
         notify: true,
         readOnly: true
       },

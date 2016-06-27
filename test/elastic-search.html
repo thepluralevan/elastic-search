@@ -17,7 +17,7 @@
     <!-- You can use the document as a place to set up your fixtures. -->
     <test-fixture id="elastic-search-fixture">
       <template>
-        <elastic-search index="ads" elastic-type='["ad"]' results="{{data}}">
+        <elastic-search index="mockads" elastic-type='["ad"]' results="{{data}}">
         </elastic-search>
       </template>
     </test-fixture>
@@ -45,7 +45,7 @@
         });
 
         test('defines the index property', function () {
-          assert.equal(es.index, 'ads');
+          assert.equal(es.index, 'mockads');
         });
 
         test('defines the elastic-type property', function() {
@@ -70,7 +70,7 @@
               expect(es.results).to.not.be.empty;
               expect(es.results).to.include.keys('hits');
               expect(es.results.hits.hits.length).to.equal(25);
-              expect(es.lastError).to.not.exist;
+              assert.isNull(es.lastError);
               assert.equal(es.results.hits.hits[0]._type, 'ad');
               done();
             });
