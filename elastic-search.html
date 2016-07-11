@@ -129,11 +129,14 @@ Example:
      * @return {ElasticSearchResults}
      */
     generateSearch: function() {
+      if(this.loading) {
+        return;
+      }
 
       var self = this;
 
-      self._setLastError(null);
       self._setLoading(true);
+      self._setLastError(null);
       self._setResults(null);
       this.client.search({
         index: this.index,
