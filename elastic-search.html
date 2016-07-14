@@ -135,9 +135,10 @@ Example:
 
       var self = this;
 
-      self._setLoading(true);
+      // Set last-error and results first so other components can update prior to loading.
       self._setLastError(null);
       self._setResults(null);
+      self._setLoading(true);
       this.client.search({
         index: this.index,
         body: this.query,
